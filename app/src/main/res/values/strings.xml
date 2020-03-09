@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">识花</string>
+    <string name="room">花间</string>
+    <string name="blog">花问</string>
+    <string name="recognize">识别</string>
+    <string name="my">我</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="text_back">返回</string>
+    <string name="text_forward">提交</string>
+</resources>

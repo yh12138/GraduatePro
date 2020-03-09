@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+    <LinearLayout
+        android:id="@+id/linear1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x160"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/flower"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/x160"
+            android:layout_height="@dimen/x160"
+            android:gravity="center"
+            android:src="@drawable/logo" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x40"
+        android:layout_marginTop="0dp">
+        <Button
+            android:id="@+id/btu_select"
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/x40"
+            android:layout_marginLeft="@dimen/x5"
+            android:text="图库" />
+
+        <Button
+            android:id="@+id/camera"
+            android:layout_height="@dimen/x40"
+            android:layout_width="@dimen/x100"
+            android:layout_marginLeft="@dimen/x5"
+            android:text="相机" />
+        <Button
+            android:layout_height="@dimen/x40"
+            android:layout_width="@dimen/x100"
+            android:layout_marginLeft="@dimen/x5"
+            android:id="@+id/recognize"
+            android:text="识别" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x180"
+        android:orientation="vertical"
+        android:gravity="center">
+        <LinearLayout
+            android:id="@+id/linear3.1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x30"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/txt_id"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x30"
+                android:gravity="center"
+                android:text="结果为：" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear3.2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x90"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/flower1"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x90"
+                android:src="@drawable/logo" />
+            <ImageView
+                android:id="@+id/flower2"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x90"
+                android:src="@drawable/logo" />
+            <ImageView
+                android:id="@+id/flower3"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x90"
+                android:src="@drawable/logo" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear3.3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x30"
+            android:layout_marginTop="@dimen/x1"
+            android:gravity="center"
+            android:background="#eeddff">
+            <TextView
+                android:id="@+id/result1"
+                android:textSize="12sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x30"
+                android:text=""/>
+            <TextView
+                android:id="@+id/result2"
+                android:textSize="12sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x30"
+                android:text=""/>
+            <TextView
+                android:id="@+id/result3"
+                android:textSize="12sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x30"
+                android:text=""
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear3.4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x30"
+            android:layout_marginTop="@dimen/x1"
+            android:gravity="center"
+            android:background="#eeddff">
+            <TextView
+                android:id="@+id/percent1"
+                android:textSize="12sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x30"
+                android:text=""
+                />
+            <TextView
+                android:id="@+id/percent2"
+                android:textSize="12sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x30"
+                android:text=""/>
+            <TextView
+                android:id="@+id/percent3"
+                android:textSize="12sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x30"
+                android:text=""/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <GridView
+                android:id="@+id/gridview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="auto_fit"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>

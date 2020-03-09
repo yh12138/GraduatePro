@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/x40" >
+
+    <!-- 首先定义标题栏 -->
+    <RelativeLayout
+        android:id="@+id/biaoti"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x40"
+        android:background="@color/top">
+        <TextView
+            android:text="识花"
+            android:id="@+id/text_title"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/button_backward"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/back"
+            android:drawablePadding="5dp"
+            android:background="@color/top"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:paddingLeft="2dp"
+            android:singleLine="true"
+            android:text="返回"
+            android:textColor="#000"
+            android:textSize="18dp" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

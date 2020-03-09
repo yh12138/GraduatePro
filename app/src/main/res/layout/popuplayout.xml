@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content"
+    android:background="@drawable/title_tools_bg"
+    android:orientation="vertical" >  
+  
+    <LinearLayout  
+        android:id="@+id/layout_change"
+        style="@style/wrap"
+        android:layout_marginTop="@dimen/x12"
+        android:orientation="horizontal"   
+        android:background="@drawable/menu_left_item_selector"  
+        android:padding="@dimen/x5"
+        android:gravity="center_vertical">
+  
+        <TextView
+            style="@style/wrap"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/x5"
+            android:text="切换账号" />  
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/user_line"
+        android:layout_width="@dimen/x80"
+        android:layout_height="@dimen/x1"
+        android:layout_centerHorizontal="true"
+        android:background="@color/title_text"/>
+    <LinearLayout  
+        android:id="@+id/layout_exit"
+        style="@style/wrap"
+        android:orientation="horizontal"   
+        android:background="@drawable/menu_left_item_selector"
+        android:padding="@dimen/x5"
+        android:gravity="center_vertical">
+  
+        <TextView
+            style="@style/wrap"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/x5"
+            android:text="退出登录" />  
+    </LinearLayout>  
+  
+</LinearLayout>  
