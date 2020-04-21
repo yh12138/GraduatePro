@@ -10,15 +10,17 @@ public class History extends DataSupport {
     private String name;
     private String score;
     private Date date;
+    private String phone;
     public History(){
         super();
     }
 
-    public History(byte[] flower,String name,String score,Date date){
+    public History(byte[] flower,String name,String score,String phone,Date date){
         super();
         this.flower=flower;
         this.name=name;
         this.score=score;
+        this.phone=phone;
         this.date=date;
     }
     public int getId() {
@@ -61,5 +63,11 @@ public class History extends DataSupport {
         this.date = date;
     }
 
+    public String getPhone() {
+        return phone;
+    }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

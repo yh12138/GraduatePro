@@ -234,6 +234,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
          toCalendar.set(Calendar.MILLISECOND, 0);
 
          return (int) ((toCalendar.getTime().getTime() - fromCalendar.getTime().getTime()) / (1000 * 60 * 60 * 24));
-}
+    }
 
 }

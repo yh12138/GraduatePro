@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+	android:background="@color/white">
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/x3"
+		android:gravity="center"
+		android:background="@color/grey" />
+    <LinearLayout
+		android:id="@+id/l_essay_title"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/x30"
+		android:layout_marginTop="@dimen/x1"
+		android:background="@color/white">
+        <TextView
+            android:id="@+id/essay_title"
+			android:textSize="14sp"
+			android:layout_width="@dimen/x240"
+			android:layout_height="@dimen/x30"
+			android:layout_marginLeft="@dimen/x10"
+			android:paddingTop="@dimen/x5"
+			android:paddingLeft="@dimen/x10"
+			android:text="title"
+			android:textStyle="bold"
+			android:ellipsize="middle"
+			android:singleLine="true" />
+
+    </LinearLayout>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/x1"
+		android:gravity="center"
+		android:background="@color/grey" />
+
+        <LinearLayout
+            android:id="@+id/l_essay_other"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x20"
+            android:layout_marginTop="@dimen/x1"
+            android:orientation="horizontal"
+            android:background="@color/white">
+            <TextView
+                android:id="@+id/essay_anthor"
+                android:textSize="8sp"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/x10"
+				android:gravity="center"
+                android:text="author"/>
+            <TextView
+                android:id="@+id/essay_commentCount"
+                android:textSize="8sp"
+                android:layout_width="@dimen/x60"
+                android:layout_height="@dimen/x10"
+                android:text="评论"/>
+            <TextView
+                android:id="@+id/essay_date"
+                android:textSize="8sp"
+                android:layout_width="@dimen/x120"
+                android:layout_height="@dimen/x10"
+                android:text="time"/>
+        </LinearLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/x3"
+		android:gravity="center"
+		android:background="@color/grey" />
+</LinearLayout>

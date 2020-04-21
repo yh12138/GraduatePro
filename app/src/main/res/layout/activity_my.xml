@@ -104,7 +104,14 @@
         zsg:show_bottomline="true"
         zsg:show_leftimg="@mipmap/history"
         zsg:show_text="识别记录" />
-
+    <com.example.flowerclassify.item_view
+        android:id="@+id/myessay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        zsg:show_bottomline="true"
+        zsg:show_leftimg="@mipmap/essay"
+        zsg:show_text="我的文章" />
     <com.example.flowerclassify.item_view
         android:id="@+id/collect"
         android:layout_width="match_parent"
@@ -123,7 +130,15 @@
         zsg:show_bottomline="true"
         zsg:show_leftimg="@mipmap/put"
         zsg:show_text="上传图片" />
-
+    <com.example.flowerclassify.item_view
+        android:id="@+id/check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        zsg:show_bottomline="true"
+        zsg:show_leftimg="@mipmap/put"
+        zsg:show_text="查看上传图片"
+        android:visibility="gone"/>
     <com.example.flowerclassify.item_view
         android:id="@+id/about"
         android:layout_width="match_parent"

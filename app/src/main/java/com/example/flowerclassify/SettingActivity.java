@@ -8,7 +8,9 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -28,7 +30,9 @@ import android.widget.Toast;
 import com.example.utils.User;
 import com.example.utils.UserDao;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,9 +49,11 @@ public class SettingActivity extends AppCompatActivity {
     private static final int REQUEST_SYSTEM_PIC = 1;
     private static final int CAMERA_RESULT = 2;
 
+    private byte[] headshot;//头像
     private EditText setting_phone1;
     private EditText setting_name1;
     private EditText setting_pwd1;
+    private String role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +97,7 @@ public class SettingActivity extends AppCompatActivity {
         //图片
         setting_headimg = (ImageView)findViewById(R.id.setting_headimg);
         Bitmap bitmap=((BitmapDrawable)setting_headimg.getDrawable()).getBitmap();
+        headshot=img(bitmap);
 
         setting_phone1=(EditText)findViewById(R.id.setting_phone1);
         setting_name1=(EditText)findViewById(R.id.setting_name1);
@@ -99,11 +106,37 @@ public class SettingActivity extends AppCompatActivity {
         Intent intent=getIntent();
         String phone=intent.getStringExtra("phone");
         User user=userdao.Query(phone);
+        role=user.getRole();
         setting_phone1.setText(user.getPhone());
         setting_name1.setText(user.getName());
         setting_pwd1.setText(user.getPassword());
         setting_modify = (Button)findViewById(R.id.setting_modify);
+        setting_modify.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserDao userdao=new UserDao();
+                User r=new User(headshot,setting_phone1.getText().toString(),setting_name1.getText().toString(),
+                        setting_pwd1.getText().toString(), role);
+                userdao.UpdateAll(r);
+                Toast.makeText(SettingActivity.this, "修改成功", Toast.LENGTH_LONG).show();
+                //记录登录状态
+                //步骤1：创建一个SharedPreferences对象
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                //步骤2： 实例化SharedPreferences.Editor对象
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                //步骤3：将获取过来的值放入文件
+                //获取当前时间
+                Date date = new Date(System.currentTimeMillis());
+                String datestr = ConverToString(date);
 
+                editor.putString("phone", setting_phone1.getText().toString());
+                editor.putString("pwd", setting_pwd1.getText().toString());
+                editor.putString("date", datestr);
+                //步骤4：提交
+                editor.commit();
+                finish();
+            }
+        });
     }
     //得到手机SD卡路径
     public String getSDPath(){
@@ -162,6 +195,7 @@ public class SettingActivity extends AppCompatActivity {
         if (requestCode == CAMERA_RESULT) {
             Bitmap bitmap = BitmapFactory.decodeFile(mPhotoPath, null);
             bimg=bitmap;
+            headshot=img(bitmap);
             setting_headimg.setImageBitmap(bitmap);
         }
     }
@@ -217,10 +251,28 @@ public class SettingActivity extends AppCompatActivity {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             bimg=bitmap;
+            headshot=img(bitmap);
             setting_headimg.setImageBitmap(bitmap);
         } else {
             Toast.makeText(SettingActivity.this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
 
+    }
+    //把图片转换为字节
+    private byte[]img(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+    //把日期转为字符串  
+    public static String ConverToString(Date date) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        return df.format(date);
+    }
+    //把字符串转为日期  
+    public static Date  ConverToDate(String strDate) throws Exception{
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.parse(strDate);
     }
 }

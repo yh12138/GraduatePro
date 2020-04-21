@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
 	<dbname value="Flower" ></dbname>
-	<version value="1"></version>
+	<version value="7"></version>
 	<list>
-		<mapping class="com.example.utils.User"></mapping>
-		<mapping class="com.example.utils.History"></mapping>
-		<mapping class="com.example.utils.RememberUser"></mapping>
+		<mapping class="com.example.utils.User"></mapping><!-->用户<!-->
+		<mapping class="com.example.utils.History"></mapping><!-->识别历史<!-->
+		<mapping class="com.example.utils.RememberUser"></mapping><!-->记住用户<!-->
+		<mapping class="com.example.utils.Essay"></mapping><!-->文章<!-->
+		<mapping class="com.example.utils.Comment"></mapping><!-->评论<!-->
+		<mapping class="com.example.utils.Collect"></mapping><!-->文章收藏<!-->
+		<mapping class="com.example.utils.UploadImg"></mapping><!-->上传图片<!-->
 	</list>
 </litepal>

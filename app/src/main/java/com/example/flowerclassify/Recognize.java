@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +43,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.utils.History;
+import com.example.utils.HistoryDao;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,27 +78,13 @@ public class Recognize extends Fragment {
     private Button camera;
     private static final int REQUEST_SYSTEM_PIC = 1;
     private static final int CAMERA_RESULT = 2;
-    //显示结果
-    private ImageView flower1;
-    private ImageView flower2;
-    private ImageView flower3;
-    private TextView result1;
-    private TextView result2;
-    private TextView result3;
-    private TextView percent1;
-    private TextView percent2;
-    private TextView percent3;
-    TextView[] arrTextr={result1,result2,result3};
-    TextView[] arrTextp={percent1,percent2,percent3};
-    ImageView[] arrImage={flower1,flower2,flower3};
+
 
     //横向GridView
     GridView gridView;
-    private int[] imgs = {R.drawable.flower, R.drawable.flower,
-            R.drawable.flower,R.drawable.flower,R.drawable.flower};
 
-
-
+    private String result;
+    public static String rootXMLPath = Environment.getExternalStorageDirectory().getPath() + "/testTXT";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -98,16 +95,7 @@ public class Recognize extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //结果显示初始化
-        int [] widget1={R.id.flower1,R.id.flower2,R.id.flower3};
-        int [] widget2={R.id.result1,R.id.result2,R.id.result3,R.id.percent1,R.id.percent2,R.id.percent3};
-        for (int i=0;i<3;i++){
-            arrImage[i]=(ImageView)getActivity().findViewById(widget1[i]);
-        }
-        for (int i=0;i<3;i++){
-            arrTextr[i]=(TextView)getActivity().findViewById(widget2[i]);
-            arrTextp[i]=(TextView)getActivity().findViewById(widget2[i+3]);
-        }
+
 
         //识别按钮
         recognize=(Button)getActivity().findViewById(R.id.recognize);
@@ -117,10 +105,10 @@ public class Recognize extends Fragment {
             @Override
             public void onClick(View v) {
                 //网络和端口号（端口号与服务器一致但可以随便）
-                String host = "192.168.1.105";
+                String host = "192.168.1.106";
                 String port = "666";
 
-                String content = flower_content;
+                String content = "1;"+flower_content;
                 System.out.println("content："+content);
                 System.out.println("content.length："+content.length());
 
@@ -167,47 +155,20 @@ public class Recognize extends Fragment {
         });
         //图片
         flower = (ImageView)getActivity().findViewById(R.id.flower);
-        Bitmap bitmap=((BitmapDrawable)flower.getDrawable()).getBitmap();
-        flower_content=bitmapToBase64(bitmap);
+        bimg=((BitmapDrawable)flower.getDrawable()).getBitmap();
+        flower_content=bitmapToBase64(bimg);
 
 
-        arrImage[0].setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                arrImage[0].setDrawingCacheEnabled(true);
-                MyImageDialog myImageDialog = new MyImageDialog(getActivity(),R.style.dialogWindowAnim,
-                        -10,500,arrImage[0].getDrawingCache());
-                myImageDialog.show();
-            }
-        });
-        arrImage[1].setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                arrImage[1].setDrawingCacheEnabled(true);
-                MyImageDialog myImageDialog = new MyImageDialog(getActivity(),R.style.dialogWindowAnim,
-                        -10,500,arrImage[1].getDrawingCache());
-                myImageDialog.show();
-            }
-        });
-        arrImage[2].setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                arrImage[2].setDrawingCacheEnabled(true);
-                MyImageDialog myImageDialog = new MyImageDialog(getActivity(),R.style.dialogWindowAnim,
-                        -10,500,arrImage[2].getDrawingCache());
-                myImageDialog.show();
-            }
-        });
 
         gridView= (GridView)getActivity().findViewById(R.id.gridview);
 
-        setGridView();
+
     }
 
 
     /**设置GirdView参数，绑定数据*/
-    private void setGridView() {
-        int size = imgs.length;
+    private void setGridView(Bitmap[] bitmaps,String []strs) {
+        int size = bitmaps.length;
 
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -220,7 +181,7 @@ public class Recognize extends Fragment {
         gridView.setStretchMode(GridView.NO_STRETCH);
         gridView.setNumColumns(size); // 设置列数量=列表集合数
 
-        GridViewAdapter adapter = new GridViewAdapter(getActivity().getApplicationContext(), imgs);
+        GridViewAdapter adapter = new GridViewAdapter(getActivity().getApplicationContext(), bitmaps,strs);
         gridView.setAdapter(adapter);
     }
 
@@ -230,24 +191,24 @@ public class Recognize extends Fragment {
         public void handleMessage(Message msg){
             //接受到服务器信息时执行
             //设置弹框
-            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-            builder.setMessage("python传来的数据："+(msg.obj).toString().length());
-            //创建弹框并显示
-            builder.create().show();
+//            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+//            builder.setMessage("1，python传来的数据："+(msg.obj).toString().length());
+//            //创建弹框并显示
+//            builder.create().show();
 
             String str=(msg.obj).toString();
             //Toast.makeText(getActivity(),str.length(),Toast.LENGTH_LONG).show();
             String strs[]=StrToArray(str,";");
-
             Bitmap[] arrBitmap=StrToBitmaps(strs[0],strs[3],strs[6]);
-
-            for (int i=0;i<3;i++){
-                arrImage[i].setImageBitmap(arrBitmap[i]);
-                arrTextr[i].setText(strs[1+i*3]);//1 4 7
-                arrTextp[i].setText(strs[2+i*3]);//2 5 8
-            }
-
-            
+            String name=strs[1]+";"+strs[4]+";"+strs[7]+";";
+            String score=strs[2]+";"+strs[5]+";"+strs[8]+";";
+            byte[] flower=img(bimg);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+            String phone=sharedPreferences.getString("phone","");
+            History history=new History(flower,name,score,phone,new Date());
+            HistoryDao historydao=new HistoryDao();
+            historydao.Insert(history);
+            setGridView(arrBitmap,strs);
         }
     };
     //服务器连接
@@ -256,7 +217,7 @@ public class Recognize extends Fragment {
             @Override
             public void run() {
                 try {
-
+                    //Toast.makeText(getActivity(),"startNetThread",Toast.LENGTH_LONG).show();
                     //创建客户端对象
                     Socket socket = new Socket(host, port);
                     //获取客户端对象的输出流
@@ -266,28 +227,39 @@ public class Recognize extends Fragment {
                     //刷新流管道
                     outputStream.flush();
                     System.out.println("打印客户端中内容："+socket);
-					
-					Toast.makeText(getActivity(),"startNetThread",Toast.LENGTH_LONG).show();
+
                     //拿到客户端输入流
                     InputStream is = socket.getInputStream();
-                    byte[] bytes = new byte[is.available()];
+                    char[] bytes = new char[1024];
+                    int n = -1;
+                    result="";
                     //回应数据
-                    int n = is.read(bytes);
-					//byte[] bytes = new byte[1024];
-					//int n=0;//得到实际读取到的字节数 读到最后返回-1
-					//String result="";
-				    ////循环读取
-				    //while((n=is.read(bytes))!=-1)//把fis里的东西读到bytes数组里去
-				    //{
-					//    //把字节转成String 从0到N变成String
-					//   String w=new String(bytes,0,n);
-					//	 result=result+w;
-				    //}
-
-                    System.out.println("bytes.length："+bytes.length);
-                    System.out.println("n："+n);
-					Toast.makeText(getActivity(),"startNetThread1",Toast.LENGTH_LONG).show();
-                    Message msg = handler.obtainMessage(HANDLER_MSG_TELL_RECV, new String(bytes, 0, n));
+//					byte[] bytes = new byte[1024];
+//                    int n=0;//得到实际读取到的字节数 读到最后返回-1
+//                    result="";
+//                    int k=0;
+//                    System.out.println("startNetThread:"+result+";");
+//                    //循环读取
+//                    while((n=is.read(bytes))!=-1)//把fis里的东西读到bytes数组里去
+//                    {
+//                        //把字节转成String 从0到N变成String
+//                        String w=new String(bytes,0,n);
+//                        k=k+n;
+//                        System.out.println(n+"char:startNetT1："+w);
+//                        //result=result+w;
+//                        //System.out.println(n+":result："+result);
+//                    }
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is,"GBK"));
+					do  {
+						if ((n=reader.read(bytes))!=-1){
+							String w=new String(bytes,0,n);
+							System.out.println(w);
+							result=result+w;
+						}
+					}while (reader.ready());
+					socket.shutdownInput();
+                    System.out.println(":startNetThread："+result.length());
+                    Message msg = handler.obtainMessage(HANDLER_MSG_TELL_RECV, result);//new String(bytes,0,n)
                     msg.sendToTarget();
                     //关闭流
                     is.close();
@@ -332,11 +304,18 @@ public class Recognize extends Fragment {
         return result;
     }
 
-    /*** base64转为bitmap*/
-    public static Bitmap base64ToBitmap(String base64Data) {
-        byte[] bytes = Base64.decode(base64Data, Base64.NO_WRAP);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
+   /*** base64转为bitmap*/
+	public static Bitmap base64ToBitmap(String base64Data) {
+		Bitmap bitmap=null;
+		try {
+			Log.d("test", "stringToBitmap: "+base64Data);
+			byte[] bytes = Base64.decode(base64Data, Base64.NO_WRAP);
+			bitmap= BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bitmap;
+	}
 
     /*** 将图片转换成Base64编码的字符串*/
     public static String imageToBase64(String path){
@@ -492,26 +471,103 @@ public class Recognize extends Fragment {
     //String转为String数组
     private String[] StrToArray(String str,String s) {
         String[] strs=str.split(s);
-        Toast.makeText(getActivity(), "strs:"+strs.length, Toast.LENGTH_SHORT).show();
+        System.out.println(strs.length+"strs："+str.length());
         return strs;
     }
     //base转为Bitmap数组
     private Bitmap[] StrToBitmaps(String str1,String str2,String str3) {
+        System.out.println("str1："+str1);
+        System.out.println("str2："+str2);
+        System.out.println("str3"+str3);
         Bitmap bitmap1=base64ToBitmap(str1);
         Bitmap bitmap2=base64ToBitmap(str2);
         Bitmap bitmap3=base64ToBitmap(str3);
         Bitmap[] arrBitmap={bitmap1,bitmap2,bitmap3};
-		Toast.makeText(getActivity(), "arrBitmap:"+arrBitmap.length, Toast.LENGTH_SHORT).show();
+        System.out.println("StrToBitmaps："+arrBitmap.length);
+		//Toast.makeText(getActivity(), "arrBitmap:"+arrBitmap.length, Toast.LENGTH_SHORT).show();
         return arrBitmap;
+    }
+    /**
+     * 保存内容到TXT文件中
+     *
+     * @param fileName
+     * @param content
+     * @return
+     */
+    public static boolean writeToXML(String fileName, String content) {
+        FileOutputStream fileOutputStream;
+        BufferedWriter bufferedWriter;
+        createDirectory(rootXMLPath);
+        File file = new File(rootXMLPath + "/" + fileName + ".txt");
+        try {
+            file.createNewFile();
+            fileOutputStream = new FileOutputStream(file);
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+            bufferedWriter.write(content);
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    //把图片转换为字节
+    private byte[]img(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+    /**
+     * 读取XML内容
+     *
+     * @param filePath
+     * @return
+     */
+    public static String readFromXML(String filePath) {
+        FileInputStream fileInputStream;
+        BufferedReader bufferedReader;
+        StringBuilder stringBuilder = new StringBuilder();
+        File file = new File(filePath);
+        if (file.exists()) {
+            try {
+                fileInputStream = new FileInputStream(file);
+                bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                bufferedReader.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 创建文件夹
+     *
+     * @param fileDirectory
+     */
+    public static void createDirectory(String fileDirectory) {
+        File file = new File(fileDirectory);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
     /** GirdView 数据适配器 */
     public class GridViewAdapter extends BaseAdapter {
         Context context;
-        int [] list;
-
-        public GridViewAdapter(Context _context, int [] _list) {
+        Bitmap [] list;
+        String [] results;
+        public GridViewAdapter(Context _context, Bitmap [] _list,String [] results) {
             this.list = _list;
             this.context = _context;
+            this.results=results;
         }
 
 
@@ -539,7 +595,9 @@ public class Recognize extends Fragment {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.result, null);
             final ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
-            imageView.setImageResource(list[position]);
+            final TextView result_f=(TextView) convertView.findViewById(R.id.result_f);
+            imageView.setImageBitmap(list[position]);//0 1 2
+            result_f.setText(results[position*3+1]+"("+results[position*3+2]+")");//1 4 7
 //            imageView.setOnClickListener( new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {

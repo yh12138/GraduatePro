@@ -37,6 +37,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.example.utils.DisplayUtil;
+import com.example.utils.UploadImg;
 import com.example.utils.User;
 
 
@@ -64,6 +65,8 @@ public class MyFragment extends Fragment {
     private LinearLayout classify_history;
     private LinearLayout collect;
     private LinearLayout put;
+    private LinearLayout myessay;
+    private LinearLayout check;
     private WifiManager my_wifiManager;
     private WifiInfo wifiInfo;
     private DhcpInfo dhcpInfo;
@@ -153,7 +156,8 @@ public class MyFragment extends Fragment {
                 String phone=sharedPreferences.getString("phone","");
                 if(phone.equals("")){
                     Toast.makeText(getActivity(),"请先登录",Toast.LENGTH_LONG).show();
-
+                    Intent intent=new Intent(getActivity(),SignActivity.class);
+                    startActivity(intent);
                 }
                 else{
                     Intent intent=new Intent(getActivity(),SettingActivity.class);
@@ -167,25 +171,105 @@ public class MyFragment extends Fragment {
         classify_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),classify_historyActivity.class);
-                startActivity(intent);
+                sharedPreferences= getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                String phone=sharedPreferences.getString("phone","");
+                if(phone.equals("")){
+                    Toast.makeText(getActivity(),"请先登录",Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(getActivity(),SignActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), classify_historyActivity.class);
+                    intent.putExtra("phone", phone);
+                    startActivity(intent);
+                }
             }
         });
         collect=(LinearLayout)getActivity().findViewById(R.id.collect);
         collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),CollectActivity.class);
-                startActivity(intent);
+                sharedPreferences= getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                String phone=sharedPreferences.getString("phone","");
+                if(phone.equals("")){
+                    Toast.makeText(getActivity(),"请先登录",Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(getActivity(),SignActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent=new Intent(getActivity(),CollectActivity.class);
+                    intent.putExtra("phone", phone);
+                    startActivity(intent);
+                }
             }
         });
         put=(LinearLayout)getActivity().findViewById(R.id.put);
         put.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),PutActivity.class);
-                startActivity(intent);
-
+                sharedPreferences= getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                String phone=sharedPreferences.getString("phone","");
+                if(phone.equals("")){
+                    Toast.makeText(getActivity(),"请先登录",Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(getActivity(),SignActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), PutActivity.class);
+                    intent.putExtra("phone", phone);
+                    startActivity(intent);
+                }
+            }
+        });
+        myessay=(LinearLayout)getActivity().findViewById(R.id.myessay);
+        //myessay.setVisibility(View.GONE);
+        myessay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferences= getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                String phone=sharedPreferences.getString("phone","");
+                if(phone.equals("")){
+                    Toast.makeText(getActivity(),"请先登录",Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(getActivity(),SignActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), MyEssayActivity.class);
+                    intent.putExtra("phone", phone);
+                    startActivity(intent);
+                }
+            }
+        });
+        check=(LinearLayout)getActivity().findViewById(R.id.check);
+        sharedPreferences= getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String myphone=sharedPreferences.getString("phone","");
+        if(myphone!="") {
+            List<User> users = DataSupport.findAll(User.class);
+            User result = new User();
+            for (User user : users) {
+                if (user.getPhone().equals(phone)) {
+                    result = user;
+                    break;
+                }
+            }
+            if(result.getRole().equals("m"))
+                check.setVisibility(View.VISIBLE);
+        }
+        check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferences= getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                String phone=sharedPreferences.getString("phone","");
+                if(phone.equals("")){
+                    Toast.makeText(getActivity(),"请先登录",Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent(getActivity(),SignActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), UploadImgActivity.class);
+                    intent.putExtra("phone", phone);
+                    startActivity(intent);
+                }
             }
         });
         login=(Button)getActivity().findViewById(R.id.login);
@@ -230,7 +314,7 @@ public class MyFragment extends Fragment {
 				//设置默认获取焦点
 				popWinShare.setFocusable(true);
 				//以某个控件的x和y的偏移量位置开始显示窗口
-				popWinShare.showAsDropDown(menu, 0, 0);
+				popWinShare.showAsDropDown(menu, 20, 0);
 				//如果窗口存在，则更新
 				popWinShare.update();
             }
@@ -306,13 +390,13 @@ public class MyFragment extends Fragment {
         sb.append("\ndns1：" + intToIp(dhcpInfo.dns1));
         sb.append("\ndns2：" + intToIp(dhcpInfo.dns2));
         sb.append("\n");
-        System.out.println(intToIp(dhcpInfo.ipAddress));
-        System.out.println(intToIp(dhcpInfo.netmask));
-        System.out.println(intToIp(dhcpInfo.gateway));
-        System.out.println(intToIp(dhcpInfo.serverAddress));
-        System.out.println(intToIp(dhcpInfo.dns1));
-        System.out.println(intToIp(dhcpInfo.dns2));
-        System.out.println(dhcpInfo.leaseDuration);
+//        System.out.println(intToIp(dhcpInfo.ipAddress));
+//        System.out.println(intToIp(dhcpInfo.netmask));
+//        System.out.println(intToIp(dhcpInfo.gateway));
+//        System.out.println(intToIp(dhcpInfo.serverAddress));
+//        System.out.println(intToIp(dhcpInfo.dns1));
+//        System.out.println(intToIp(dhcpInfo.dns2));
+//        System.out.println(dhcpInfo.leaseDuration);
 
         sb.append("Wifi信息：");
         sb.append("\nIpAddress：" + intToIp(wifiInfo.getIpAddress()));

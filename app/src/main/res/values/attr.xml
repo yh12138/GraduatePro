@@ -5,4 +5,8 @@
         <attr name="show_leftimg" format="integer" />
         <attr name="show_text" format="string" />
     </declare-styleable>
+	<declare-styleable name="LimitScrollEditText">
+        <attr name="hint" format="string" />
+        <attr name="maxLength" format="integer" />
+    </declare-styleable>
 </resources>

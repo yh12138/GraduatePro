@@ -27,8 +27,12 @@ public class UserDao {
         }
         return result;
     }
-    public void Update(User user,String pwd){
+    public void UpdatePwd(User user,String pwd){
         user.setPassword(pwd);
+        user.updateAll("phone = ?",user.getPhone());
+    }
+    public void UpdateAll(User user){
+
         user.updateAll("phone = ?",user.getPhone());
     }
 }

@@ -45,96 +45,22 @@
     <LinearLayout
         android:id="@+id/linear3"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x180"
+        android:layout_height="@dimen/x20"
         android:orientation="vertical"
         android:gravity="center">
         <LinearLayout
             android:id="@+id/linear3.1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x30"
+            android:layout_height="wrap_content"
             android:gravity="center">
             <TextView
                 android:id="@+id/txt_id"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/x30"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="结果为：" />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linear3.2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x90"
-            android:gravity="center">
-            <ImageView
-                android:id="@+id/flower1"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x90"
-                android:src="@drawable/logo" />
-            <ImageView
-                android:id="@+id/flower2"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x90"
-                android:src="@drawable/logo" />
-            <ImageView
-                android:id="@+id/flower3"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x90"
-                android:src="@drawable/logo" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linear3.3"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x30"
-            android:layout_marginTop="@dimen/x1"
-            android:gravity="center"
-            android:background="#eeddff">
-            <TextView
-                android:id="@+id/result1"
-                android:textSize="12sp"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x30"
-                android:text=""/>
-            <TextView
-                android:id="@+id/result2"
-                android:textSize="12sp"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x30"
-                android:text=""/>
-            <TextView
-                android:id="@+id/result3"
-                android:textSize="12sp"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x30"
-                android:text=""
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linear3.4"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x30"
-            android:layout_marginTop="@dimen/x1"
-            android:gravity="center"
-            android:background="#eeddff">
-            <TextView
-                android:id="@+id/percent1"
-                android:textSize="12sp"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x30"
-                android:text=""
-                />
-            <TextView
-                android:id="@+id/percent2"
-                android:textSize="12sp"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x30"
-                android:text=""/>
-            <TextView
-                android:id="@+id/percent3"
-                android:textSize="12sp"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/x30"
-                android:text=""/>
-        </LinearLayout>
+
 
     </LinearLayout>
     <HorizontalScrollView

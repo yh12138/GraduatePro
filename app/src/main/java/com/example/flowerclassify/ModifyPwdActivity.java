@@ -41,7 +41,7 @@ public class ModifyPwdActivity extends AppCompatActivity {
                 //Toast.makeText(ModifyPwdActivity.this, "登录成功", Toast.LENGTH_LONG).show();
                 String newpwd=modify_newpwd1.getText().toString();
                 UserDao userdao=new UserDao();
-                userdao.Update(user,newpwd);
+                userdao.UpdatePwd(user,newpwd);
                 Toast.makeText(ModifyPwdActivity.this, "修改成功", Toast.LENGTH_LONG).show();
             }
         });

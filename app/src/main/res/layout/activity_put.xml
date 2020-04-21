@@ -1,9 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0FFFF"
     tools:context=".PutActivity">
+    <com.example.utils.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.example.utils.TitleLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x120"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/x20"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/put_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择上传图片"
+            android:gravity="center"
+            android:textSize="20sp"/>
+        <ImageView
+            android:id="@+id/putimg"
+            android:layout_width="@dimen/x80"
+            android:layout_height="@dimen/x80"
+            android:layout_marginTop="@dimen/x20"
+            android:gravity="center"
+            android:src="@drawable/logo" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x80"
+        android:layout_marginTop="@dimen/x10"
+        android:gravity="center">
+        <EditText
+            android:layout_marginTop="@dimen/x10"
+            android:id="@+id/put_name"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            android:layout_width="@dimen/x200"
+            android:layout_height="@dimen/x30"
+            android:hint="花卉名称"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x20"
+        android:gravity="center">
+        <Button
+            android:id="@+id/write_submit"
+            android:text="提交"
+            android:textColor="#ffffff"
+            android:background="@drawable/button"
+            android:textSize="20sp"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/x40"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

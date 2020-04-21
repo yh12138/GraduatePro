@@ -19,7 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ModifyPwdActivity"></activity>
+        <activity android:name=".UploadImgActivity"></activity>
+        <activity android:name=".MyEssayDetailActivity" />
+        <activity android:name=".MyEssayActivity" />
+        <activity android:name=".WriteEssayActivity" />
+        <activity android:name=".FlowerDetailActivity" />
+        <activity android:name=".EssayDetailActivity" />
+        <activity android:name=".ModifyPwdActivity" />
         <activity android:name=".classify_historyActivity" />
         <activity android:name=".CollectActivity" />
         <activity android:name=".SettingActivity" />
@@ -29,7 +35,7 @@
         <activity android:name=".SignActivity" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/custMenuStyle">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
